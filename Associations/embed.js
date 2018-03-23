@@ -19,23 +19,40 @@ var userSchema = new mongoose.Schema({
 var User = mongoose.model("User", userSchema);
 
 // DUMMY USER
-var newUser = new User({
-    email: "hermoine@hogwarts.edu",
-    name: "Hermoine Granger"
-});
+// var newUser = new User({
+//     email: "hermoine@hogwarts.edu",
+//     name: "Hermoine Granger"
+// });
 
-newUser.posts.push({
-    title: "How to brew polyjuice potion",
-    content: "Just kiiding. Go to potion's class and learn it"
-});
+// newUser.posts.push({
+//     title: "How to brew polyjuice potion",
+//     content: "Just kiiding. Go to potion's class and learn it"
+// });
 
-newUser.save(function(err, user){
-    if(err){
-        console.log(err);
-    } else {
-        console.log(user);
-    }
-});
+// newUser.save(function(err, user){
+//     if(err){
+//         console.log(err);
+//     } else {
+//         console.log(user);
+//     }
+// });
+
+User.findOne({name:"Hermoine Granger"}, function(err, user){
+        if(err){
+            console.log(err);
+        } else {
+            user.posts.push({
+            title: "3 things I really hate",
+            content: "Voldemort. Voldemort. Voldemort"
+        });
+        user.save(function(err, user){
+            if(err){
+                console.log(err);
+            } else {
+                console.log(user);
+            }
+        });
+}});
 
 // var newPost = new Post({
 //     title: "Reflection on apples",
