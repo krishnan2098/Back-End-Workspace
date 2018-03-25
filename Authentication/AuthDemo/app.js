@@ -19,6 +19,7 @@ app.use(require("express-session")({
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -30,7 +31,7 @@ app.get("/", (req, res) => {
     res.render("home");
 });
 
-app.get("/secret", (req,res) => {
+app.get("/secret", isLoggedIn, (req,res) => {
    res.render("secret") ;
 });
 
@@ -42,8 +43,6 @@ app.get("/register", (req, res) => {
 
 //handling user sign up
 app.post("/register", (req, res) => {
-    req.body.username
-    req.body.password
     User.register(new User({username: req.body.username}), req.body.password, (err, user) => {
         if(err){
             console.log(err);
@@ -58,9 +57,28 @@ app.post("/register", (req, res) => {
 //LOGIN ROUTES
 //Render Login forms
 app.get("/login", (req, res) => {
-    res.render)("login");
+    res.render("login");
+});
+
+//login logic
+//using middleware
+app.post("/login",passport.authenticate("local",{
+    successRedirect: "/secret",
+    failureRedirect: "/login"
+}), (req, res) => {});
+
+app.get("/logout", (req, res) => {
+    req.logout();
+    res.redirect("/");
 });
 
 app.listen(process.env.PORT,process.env.IP, () => {
     console.log("server has started ...");
 });
+
+function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
