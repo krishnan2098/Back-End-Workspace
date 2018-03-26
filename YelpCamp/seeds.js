@@ -35,10 +35,6 @@ function seedDB(){
                 } else {
                     console.log("Campground added");
                     
-                    Campground.find({}, function(campground){
-                       console.log(campground) ;
-                    });
-                    
                     //CREAT A COMMENT
                     Comment.create({
                         text: "This place is great but i wish there was internet",

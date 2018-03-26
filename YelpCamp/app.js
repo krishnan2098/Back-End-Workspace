@@ -15,6 +15,19 @@ app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 seedDB();
 
+// Passport CONFIG
+app.use(require("express-session")({
+    secret: "Rusty is the cutest!",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.get("/", function( req, res){
     res.render("landing");
 });
