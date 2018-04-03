@@ -1,3 +1,4 @@
+require("dotenv").config();
 var express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
@@ -24,7 +25,7 @@ app.set("view engine", "ejs");
 app.use(methodOverride("_method"));
 app.use(flash());
 // seedDB(); //seed the data
-
+app.locals.moment = require('moment');
 
 // Passport CONFIG
 app.use(require("express-session")({
